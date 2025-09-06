@@ -1,99 +1,11 @@
 # Conway's Game of Life
 # Nathaniel Moodie
 # Project Originally Created On: Aug. 31, 2025
-# Most Recently Updated On: Sep. 4, 2025
+# Most Recently Updated On: Sep. 6, 2025
 
 import math
 import pygame
 import random
-
-# The project's current version
-version = 3
-
-# Life states (whether a tile is alive or dead)
-DEAD = 0
-ALIVE = 1
-gameState=DEAD
-
-# Window dimensions
-WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 500
-
-# Tile size and gameplay area setup
-TILE_SIZE = 25
-GAMEPLAY_AREA_LEFT_EDGE = 2*TILE_SIZE
-GAMEPLAY_AREA_RIGHT_EDGE = WINDOW_WIDTH - GAMEPLAY_AREA_LEFT_EDGE
-GAMEPLAY_AREA_TOP_EDGE = 2*TILE_SIZE
-GAMEPLAY_AREA_BOTTOM_EDGE = WINDOW_HEIGHT - GAMEPLAY_AREA_TOP_EDGE
-GAMEPLAY_WIDTH = GAMEPLAY_AREA_RIGHT_EDGE - GAMEPLAY_AREA_LEFT_EDGE
-GAMEPLAY_HEIGHT = GAMEPLAY_AREA_BOTTOM_EDGE - GAMEPLAY_AREA_TOP_EDGE
-TILE_PADDING = 2
-ACTUAL_TILE_SIZE = TILE_SIZE - 2*TILE_PADDING
-X_COUNT = GAMEPLAY_WIDTH // TILE_SIZE
-Y_COUNT =  GAMEPLAY_HEIGHT // TILE_SIZE
-TILE_COUNT = X_COUNT * Y_COUNT
-
-# The length of life state memory
-LIFE_STATE_MEMORY_LENGTH = 8
-
-# Frames per second
-FPS = 2
-
-# Font size
-FONT_SIZE = math.floor(0.6*TILE_SIZE)-1
-
-# Colors
-colorPalettes = (("black", "gold"), ("gold","black"), ("orange","blue"), ("black", "deepskyblue1"), ("darkslateblue", "yellow"))
-colorPalette = random.choice(colorPalettes)
-bgColor=colorPalette[0]
-highlightColor=colorPalette[1]
-
-# Generation of the simulation
-gen=0
-
-# Whether the left mouse button is being clicked
-left_click = False
-
-# Tile data: position, life states, # of living neighbors, etc. 
-tilePositions = []
-lifeStates = str(DEAD)*TILE_COUNT
-previousLifeStates = []
-livingNeighborCounts = str(0)*TILE_COUNT
-possibleAliveNeighborIDs = []
-initiallyAliveTiles = []
-
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Conway's Game of Life")
-pygame.display.set_icon(pygame.image.load("assets/img/triforce.ico"))
-clock = pygame.time.Clock()
-font = pygame.font.SysFont("Consolas", FONT_SIZE)
-
-# font surfaces
-title_surface = font.render(f"Conway's Game of Life v{version}", True, highlightColor) 
-copyright_surface = font.render("Created: John Conway, 1970 ~ Recreated: Nathaniel Moodie, 2025", True, highlightColor)
-click_prompt_surface = font.render("Click any tile to switch it", True, highlightColor)
-start_prompt_surface = font.render("Hold SPACE to start game", True, highlightColor)
-stop_prompt_surface = font.render("Hold ESC to end game", True, highlightColor)
-generation_surface = font.render(f"Generation {gen}", True, highlightColor)
-random_button_surface = font.render("Random", True, highlightColor)
-clear_button_surface = font.render("Clear", True, highlightColor)
-
-# audio setup
-pygame.mixer.init()
-hoverSFX = pygame.mixer.Sound("assets/sfx/hover.mp3")
-addTileSFX = pygame.mixer.Sound("assets/sfx/leftClick2.mp3")
-deleteTileSFX = pygame.mixer.Sound("assets/sfx/rightClick.mp3")
-
-# button rectangles
-random_button_rect = pygame.Rect(WINDOW_WIDTH//2.05, 5, 
-                                 round(TILE_SIZE*2.3), round(TILE_SIZE*0.9))
-clear_button_rect = pygame.Rect(WINDOW_WIDTH//1.6, 5, 
-                                 round(TILE_SIZE*2.3), round(TILE_SIZE*0.9))
-
-# Whether the game is running or not
-running=True
 
 
 def length_of_int(n:int):
@@ -242,7 +154,6 @@ def count_all_live_neighbors(altTileID):
             livingNeighborCounts = mutated_string(livingNeighborCounts, str(int(livingNeighborCounts[tileID-1]) + 1), tileID-1)
         
 
-
 def update_simulation():
     global gen
     global generation_surface
@@ -334,6 +245,95 @@ def mutated_string(string:str, object:str, new_pos:int):
 
     # Converts the new list to a string and returns it
     return "".join(character_list)
+
+
+# The project's current version
+version = 3
+
+# Life states (whether a tile is alive or dead)
+DEAD = 0
+ALIVE = 1
+gameState=DEAD
+
+# Window dimensions
+WINDOW_WIDTH = 500
+WINDOW_HEIGHT = 500
+
+# Tile size and gameplay area setup
+TILE_SIZE = 25
+GAMEPLAY_AREA_LEFT_EDGE = 2*TILE_SIZE
+GAMEPLAY_AREA_RIGHT_EDGE = WINDOW_WIDTH - GAMEPLAY_AREA_LEFT_EDGE
+GAMEPLAY_AREA_TOP_EDGE = 2*TILE_SIZE
+GAMEPLAY_AREA_BOTTOM_EDGE = WINDOW_HEIGHT - GAMEPLAY_AREA_TOP_EDGE
+GAMEPLAY_WIDTH = GAMEPLAY_AREA_RIGHT_EDGE - GAMEPLAY_AREA_LEFT_EDGE
+GAMEPLAY_HEIGHT = GAMEPLAY_AREA_BOTTOM_EDGE - GAMEPLAY_AREA_TOP_EDGE
+TILE_PADDING = 2
+ACTUAL_TILE_SIZE = TILE_SIZE - 2*TILE_PADDING
+X_COUNT = GAMEPLAY_WIDTH // TILE_SIZE
+Y_COUNT =  GAMEPLAY_HEIGHT // TILE_SIZE
+TILE_COUNT = X_COUNT * Y_COUNT
+
+# The length of life state memory
+LIFE_STATE_MEMORY_LENGTH = 8
+
+# Frames per second
+FPS = 2
+
+# Font size
+FONT_SIZE = math.floor(0.6*TILE_SIZE)-1
+
+# Colors
+colorPalettes = (("black", "gold"), ("gold","black"), ("orange","blue"), ("black", "deepskyblue1"), ("darkslateblue", "yellow"))
+colorPalette = random.choice(colorPalettes)
+bgColor=colorPalette[0]
+highlightColor=colorPalette[1]
+
+# Generation of the simulation
+gen=0
+
+# Whether the left mouse button is being clicked
+left_click = False
+
+# Tile data: position, life states, # of living neighbors, etc. 
+tilePositions = []
+lifeStates = str(DEAD)*TILE_COUNT
+previousLifeStates = []
+livingNeighborCounts = str(0)*TILE_COUNT
+possibleAliveNeighborIDs = []
+initiallyAliveTiles = []
+
+# pygame setup
+pygame.init()
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+pygame.display.set_caption("Conway's Game of Life")
+pygame.display.set_icon(pygame.image.load("assets/img/triforce.ico"))
+clock = pygame.time.Clock()
+font = pygame.font.SysFont("Consolas", FONT_SIZE)
+
+# font surfaces
+title_surface = font.render(f"Conway's Game of Life v{version}", True, highlightColor) 
+copyright_surface = font.render("Created: John Conway, 1970 ~ Recreated: Nathaniel Moodie, 2025", True, highlightColor)
+click_prompt_surface = font.render("Click any tile to switch it", True, highlightColor)
+start_prompt_surface = font.render("Hold SPACE to start game", True, highlightColor)
+stop_prompt_surface = font.render("Hold ESC to end game", True, highlightColor)
+generation_surface = font.render(f"Generation {gen}", True, highlightColor)
+random_button_surface = font.render("Random", True, highlightColor)
+clear_button_surface = font.render("Clear", True, highlightColor)
+
+# audio setup
+pygame.mixer.init()
+hoverSFX = pygame.mixer.Sound("assets/sfx/hover.mp3")
+addTileSFX = pygame.mixer.Sound("assets/sfx/leftClick2.mp3")
+deleteTileSFX = pygame.mixer.Sound("assets/sfx/rightClick.mp3")
+
+# button rectangles
+random_button_rect = pygame.Rect(WINDOW_WIDTH//2.05, 5, 
+                                 round(TILE_SIZE*2.3), round(TILE_SIZE*0.9))
+clear_button_rect = pygame.Rect(WINDOW_WIDTH//1.6, 5, 
+                                 round(TILE_SIZE*2.3), round(TILE_SIZE*0.9))
+
+# Whether the game is running or not
+running=True
 
 
 # Sets the screen
